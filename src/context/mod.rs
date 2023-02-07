@@ -16,6 +16,8 @@ impl WasmContext {
         let (code_image_len, initial_memory_len) =
             (code_image.len() as u64, initial_memory.len() as u64);
         let executable_image_len = code_image_len + initial_memory_len;
+
+        // Init executable image
         memory.init(code_image, 0, code_image_len);
         memory.init(initial_memory, code_image_len, initial_memory_len);
         memory.add_section(MemorySection::ExecutableImage(
@@ -48,7 +50,6 @@ impl WasmContext {
     }
 
     pub fn inc_iaddr(&mut self, opcode_size: usize) {
-        //println!("Increase {} iaddr: {} ", opcode_size, self.iaddr);
         self.iaddr += opcode_size as u64;
     }
 
@@ -67,13 +68,14 @@ impl WasmContext {
         // Matching byte_code to Wasm opcode
         match byte_code {
             0xb => {
+                println!("{}|{}\tend", self.pc, self.iaddr - 1);
                 self.inc_iaddr(1);
                 self.inc_pc();
                 WasmOpcode::End
             }
             0x20 => {
-                self.inc_iaddr(1);
                 // Seek iaddr to param index
+                self.inc_iaddr(1);
                 let param_index = self.memory.read(self.iaddr, 1)[0] as u8;
                 // Read data from param index to stack
                 // Section 1 is initial memory, i'm to lazy to create a constant
@@ -81,19 +83,20 @@ impl WasmContext {
                 // I put the param in initial memory
                 let (param_start, _) = self.memory.get_section(1);
 
-                /*
-                println!(
-                    "param_index: {} param_start: {} offset: {}",
-                    param_index,
-                    param_start,
-                    param_start + (param_index as u64 * 8)
-                );*/
                 // i64 is 16 bytes
                 let param = u64::from_be_bytes(
                     self.memory
                         .read(param_start + (param_index as u64 * 8), 8)
                         .try_into()
                         .unwrap(),
+                );
+
+                println!(
+                    "{}|{}\tlocal.get\t{} i64 {}",
+                    self.pc,
+                    self.iaddr - 1,
+                    param_index,
+                    param
                 );
                 // Put param to stack
                 self.stack.push(param);
@@ -109,6 +112,16 @@ impl WasmContext {
                     self.stack.pop().expect("Stack is empty"),
                     self.stack.pop().expect("Stack is empty"),
                 );
+                // Let's consider this is a cheat
+                // we put the result to memory, to check the ability to write
+                // Don't expect the Wasm runtime have the same be haviour
+                let (program_memory_start, _) = self.memory.get_section(2);
+
+                self.memory
+                    .write(&(a + b).to_be_bytes(), program_memory_start, 8);
+
+                println!("{}|{}\tadd\t\t{} {}", self.pc, self.iaddr - 1, a, b);
+
                 self.inc_iaddr(1);
                 // Increase program counter
                 self.inc_pc();

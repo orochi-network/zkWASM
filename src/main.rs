@@ -18,8 +18,8 @@ fn main() {
         ],
     );
 
-    println!("{:?}", a.next());
-    println!("{:?}", a.next());
-    println!("{:?}", a.next());
-    println!("{:?}", a.next());
+    a.next();
+    a.next();
+    a.next();
+    a.next();
 }

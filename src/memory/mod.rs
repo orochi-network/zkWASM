@@ -83,7 +83,6 @@ impl<'a> Memory<'a> for WasmMemory {
     }
 
     fn read(&'a self, offset: u64, length: u64) -> &'a [u8] {
-        //println!("{:?}", self.memory[0..32].to_vec());
         &self.memory[offset as usize..(offset + length) as usize]
     }
 
