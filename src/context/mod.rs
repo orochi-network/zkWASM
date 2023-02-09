@@ -26,7 +26,7 @@ impl WasmContext {
         ));
         memory.add_section(MemorySection::ProgramMemory((executable_image_len, 1024)));
         WasmContext {
-            pc: 0,
+            pc: 1,
             iaddr: 0, // Point to the code image
             memory,
             stack: Vec::new(),
@@ -68,7 +68,7 @@ impl WasmContext {
         // Matching byte_code to Wasm opcode
         match byte_code {
             0xb => {
-                println!("{}|{}\tend", self.pc, self.iaddr - 1);
+                println!("{}|{}\tend", self.pc, self.iaddr);
                 self.inc_iaddr(1);
                 self.inc_pc();
                 WasmOpcode::End
@@ -83,7 +83,7 @@ impl WasmContext {
                 // I put the param in initial memory
                 let (param_start, _) = self.memory.get_section(1);
 
-                // i64 is 16 bytes
+                // i64 is 8 bytes
                 let param = u64::from_be_bytes(
                     self.memory
                         .read(param_start + (param_index as u64 * 8), 8)
@@ -120,7 +120,7 @@ impl WasmContext {
                 self.memory
                     .write(&(a + b).to_be_bytes(), program_memory_start, 8);
 
-                println!("{}|{}\tadd\t\t{} {}", self.pc, self.iaddr - 1, a, b);
+                println!("{}|{}\tadd\t\t{} {}", self.pc, self.iaddr, a, b);
 
                 self.inc_iaddr(1);
                 // Increase program counter
