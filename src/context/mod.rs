@@ -2,12 +2,17 @@ use crate::{
     memory::{Memory, MemorySection, WasmMemory},
     opcode::WasmOpcode,
 };
+use crate::trace::memory_location::MemoryLocation;
+use crate::trace::plain_trace_tuple::PlainTraceTuple;
 
 pub struct WasmContext {
     pc: u64,
     iaddr: u64,
     memory: WasmMemory,
     stack: Vec<u64>,
+
+    // this part is for constructing proof
+    plain_trace_table: Vec<PlainTraceTuple>,
 }
 
 impl WasmContext {
@@ -25,11 +30,12 @@ impl WasmContext {
             (code_image_len, executable_image_len),
         ));
         memory.add_section(MemorySection::ProgramMemory((executable_image_len, 1024)));
-        WasmContext {
+        Self {
             pc: 1,
             iaddr: 0, // Point to the code image
             memory,
             stack: Vec::new(),
+            plain_trace_table: vec![],
         }
     }
 
@@ -71,6 +77,14 @@ impl WasmContext {
                 println!("{}|{}\tend", self.pc, self.iaddr);
                 self.inc_iaddr(1);
                 self.inc_pc();
+
+                // collect trace
+                self.plain_trace_table.push(
+                    PlainTraceTuple::new(
+                        pc: self.pc,
+                        iaddr: self.iaddr,
+                    )
+                );
                 WasmOpcode::End
             }
             0x20 => {
@@ -104,6 +118,18 @@ impl WasmContext {
                 self.inc_iaddr(1);
                 // Increase program counter
                 self.inc_pc();
+
+                // collect trace
+                self.plain_trace_table.push(
+                    PlainTraceTuple::new(
+                        pc: self.pc,
+                        iaddr: self.iaddr,
+                        [
+                            MemoryLocation::new(),
+                        ]
+                    )
+                );
+
                 // 0xfe is i64
                 WasmOpcode::LocalGet(param_index, 0xfe)
             }
@@ -114,7 +140,7 @@ impl WasmContext {
                 );
                 // Let's consider this is a cheat
                 // we put the result to memory, to check the ability to write
-                // Don't expect the Wasm runtime have the same be haviour
+                // Don't expect the Wasm runtime have the same behaviour
                 let (program_memory_start, _) = self.memory.get_section(2);
 
                 self.memory
@@ -125,7 +151,15 @@ impl WasmContext {
                 self.inc_iaddr(1);
                 // Increase program counter
                 self.inc_pc();
-                // 0xfe is i64
+
+
+                // collect trace
+                self.plain_trace_table.push(
+                    PlainTraceTuple::new(
+                        pc: self.pc,
+                        iaddr: self.iaddr,
+                    )
+                );
                 WasmOpcode::I64Add(a, b)
             }
             _ => WasmOpcode::Unreachable,
