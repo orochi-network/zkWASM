@@ -2,17 +2,20 @@ use crate::{
     memory::{Memory, MemorySection, WasmMemory},
     opcode::WasmOpcode,
 };
-use crate::trace::memory_location::MemoryLocation;
-use crate::trace::plain_trace_tuple::PlainTraceTuple;
+use crate::trace::state_trace_manager::StateTraceManager;
+use crate::trace::storage_access_record::{AccessType, SectionType, StorageAccessRecord, StorageType};
+use crate::trace::state_trace_tuple::StateTraceTuple;
+use crate::trace_collector::opcode_0x0b::Collector0x0b;
 
 pub struct WasmContext {
     pc: u64,
     iaddr: u64,
     memory: WasmMemory,
     stack: Vec<u64>,
+    time_stamp: u64,
 
     // this part is for constructing proof
-    plain_trace_table: Vec<PlainTraceTuple>,
+    state_trace_manager: StateTraceManager,
 }
 
 impl WasmContext {
@@ -35,7 +38,9 @@ impl WasmContext {
             iaddr: 0, // Point to the code image
             memory,
             stack: Vec::new(),
-            plain_trace_table: vec![],
+            time_stamp: 0,
+
+            state_trace_manager: StateTraceManager::new(),
         }
     }
 
@@ -73,18 +78,13 @@ impl WasmContext {
 
         // Matching byte_code to Wasm opcode
         match byte_code {
-            0xb => {
+            0x0b => {
                 println!("{}|{}\tend", self.pc, self.iaddr);
                 self.inc_iaddr(1);
                 self.inc_pc();
 
                 // collect trace
-                self.plain_trace_table.push(
-                    PlainTraceTuple::new(
-                        pc: self.pc,
-                        iaddr: self.iaddr,
-                    )
-                );
+                self.state_trace_manager.collect0x0b(&mut self.time_stamp, self.pc, self.iaddr);
                 WasmOpcode::End
             }
             0x20 => {
@@ -120,15 +120,6 @@ impl WasmContext {
                 self.inc_pc();
 
                 // collect trace
-                self.plain_trace_table.push(
-                    PlainTraceTuple::new(
-                        pc: self.pc,
-                        iaddr: self.iaddr,
-                        [
-                            MemoryLocation::new(),
-                        ]
-                    )
-                );
 
                 // 0xfe is i64
                 WasmOpcode::LocalGet(param_index, 0xfe)
@@ -154,12 +145,6 @@ impl WasmContext {
 
 
                 // collect trace
-                self.plain_trace_table.push(
-                    PlainTraceTuple::new(
-                        pc: self.pc,
-                        iaddr: self.iaddr,
-                    )
-                );
                 WasmOpcode::I64Add(a, b)
             }
             _ => WasmOpcode::Unreachable,
