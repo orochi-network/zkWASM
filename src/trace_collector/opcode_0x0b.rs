@@ -1,13 +1,11 @@
 use crate::trace::state_trace_manager::StateTraceManager;
-use crate::trace::state_trace_tuple::{MAX_NUM_READ_LOCATIONS, MAX_NUM_WRITE_LOCATIONS, StateTraceTuple};
+use crate::trace::state_trace_tuple;
+use crate::trace::state_trace_tuple::{StateTraceTuple};
 use crate::trace::storage_access_record::{AccessType, SectionType, StorageAccessRecord, StorageType};
+use crate::util::{util, constant_setting::ConstantValue};
 
-pub trait Collector0x0b {
-    fn collect0x0b(&mut self, time_stamp: &mut u64, pc: u64, iaddr: u64);
-}
-
-impl Collector0x0b for StateTraceManager {
-    fn collect0x0b(&mut self, time_stamp: &mut u64, pc: u64, iaddr: u64) {
+impl StateTraceManager {
+    pub fn collect0x0b(&mut self, time_stamp: &mut u64, pc: u64, iaddr: u64) {
         self.add_state_trace_tuple(
             StateTraceTuple::new(
                 pc,
@@ -18,7 +16,7 @@ impl Collector0x0b for StateTraceManager {
                         SectionType::Undefined,
                         0,
                         0,
-                        time_stamp.clone(),
+                        util::get_value_and_increase::<u64>(time_stamp),
                         AccessType::Read,
                     ),
                     StorageAccessRecord::new(
@@ -26,7 +24,7 @@ impl Collector0x0b for StateTraceManager {
                         SectionType::Undefined,
                         0,
                         0,
-                        time_stamp.clone() + 1,
+                        util::get_value_and_increase::<u64>(time_stamp),
                         AccessType::Read,
                     ),
                     StorageAccessRecord::new(
@@ -34,7 +32,7 @@ impl Collector0x0b for StateTraceManager {
                         SectionType::Undefined,
                         0,
                         0,
-                        time_stamp.clone() + 2,
+                        util::get_value_and_increase::<u64>(time_stamp),
                         AccessType::Read,
                     ),
                 ],
@@ -44,7 +42,7 @@ impl Collector0x0b for StateTraceManager {
                         SectionType::Undefined,
                         0,
                         0,
-                        time_stamp.clone() + 3,
+                        util::get_value_and_increase::<u64>(time_stamp),
                         AccessType::Write,
                     ),
                     StorageAccessRecord::new(
@@ -52,7 +50,7 @@ impl Collector0x0b for StateTraceManager {
                         SectionType::Undefined,
                         0,
                         0,
-                        time_stamp.clone() + 4,
+                        util::get_value_and_increase::<u64>(time_stamp),
                         AccessType::Write,
                     ),
                     StorageAccessRecord::new(
@@ -60,13 +58,11 @@ impl Collector0x0b for StateTraceManager {
                         SectionType::Undefined,
                         0,
                         0,
-                        time_stamp.clone() + 5,
+                        util::get_value_and_increase::<u64>(time_stamp),
                         AccessType::Write,
                     ),
                 ]
             )
         );
-        *time_stamp += MAX_NUM_READ_LOCATIONS as u64;
-        *time_stamp += MAX_NUM_WRITE_LOCATIONS as u64;
     }
 }

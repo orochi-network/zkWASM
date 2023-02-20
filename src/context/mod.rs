@@ -5,7 +5,6 @@ use crate::{
 use crate::trace::state_trace_manager::StateTraceManager;
 use crate::trace::storage_access_record::{AccessType, SectionType, StorageAccessRecord, StorageType};
 use crate::trace::state_trace_tuple::StateTraceTuple;
-use crate::trace_collector::opcode_0x0b::Collector0x0b;
 
 pub struct WasmContext {
     pc: u64,
