@@ -85,7 +85,7 @@ impl WasmContext {
                 self.inc_pc();
 
                 // collect trace
-                self.state_trace_manager.collect0x0b(&mut self.time_stamp, self.pc, self.iaddr);
+                self.state_trace_manager.collect_0x0b(&mut self.time_stamp, self.pc, self.iaddr);
                 WasmOpcode::End
             }
             0x20 => {
@@ -121,7 +121,7 @@ impl WasmContext {
                 self.inc_pc();
 
                 // collect trace
-
+                self.state_trace_manager.collect_0x20(&mut self.time_stamp, self.pc, self.iaddr);
                 // 0xfe is i64
                 WasmOpcode::LocalGet(param_index, 0xfe)
             }
@@ -146,6 +146,8 @@ impl WasmContext {
 
 
                 // collect trace
+                self.state_trace_manager.collect_0x7c(&mut self.time_stamp, self.pc, self.iaddr);
+
                 WasmOpcode::I64Add(a, b)
             }
             _ => WasmOpcode::Unreachable,
