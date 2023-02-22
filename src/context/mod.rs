@@ -3,7 +3,9 @@ use crate::{
     opcode::WasmOpcode,
 };
 use crate::trace::state_trace_manager::StateTraceManager;
-use crate::trace::storage_access_record::{AccessType, SectionType, StorageAccessRecord, StorageType};
+use crate::trace::storage_access_record::{
+    SectionType, StorageReadRecord, StorageWriteRecord, StorageType
+};
 use crate::trace::state_trace_tuple::StateTraceTuple;
 
 pub struct WasmContext {

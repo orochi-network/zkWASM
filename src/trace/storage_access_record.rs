@@ -13,35 +13,63 @@ pub enum SectionType {
     Undefined = 5,
 }
 
-pub enum AccessType {
-    Read = 0,
-    Write = 1,
-}
+// pub enum AccessType {
+//     Read = 0,
+//     Write = 1,
+// }
 
-pub struct StorageAccessRecord {
+pub struct StorageReadRecord {
     storage_type: StorageType,
     section_type: SectionType,
     location: u64,
     value: u64,
     time_stamp: u64,
-    access_type: AccessType,
+    // access_type: AccessType,
 }
 
-impl StorageAccessRecord {
+impl StorageReadRecord {
     pub fn new(storage_type: StorageType,
                section_type: SectionType,
                location: u64,
                value: u64,
                time_stamp: u64,
-               access_type: AccessType
+               // access_type: AccessType
     ) -> Self {
         Self {
-            storage_type: storage_type,
-            section_type: section_type,
-            location: location,
-            value: value,
-            time_stamp: time_stamp,
-            access_type: access_type,
+            storage_type,
+            section_type,
+            location,
+            value,
+            time_stamp,
+            // access_type: access_type,
+        }
+    }
+}
+
+pub struct StorageWriteRecord {
+    storage_type: StorageType,
+    section_type: SectionType,
+    location: u64,
+    value: u64,
+    time_stamp: u64,
+    // access_type: AccessType,
+}
+
+impl StorageWriteRecord {
+    pub fn new(storage_type: StorageType,
+               section_type: SectionType,
+               location: u64,
+               value: u64,
+               time_stamp: u64,
+               // access_type: AccessType
+    ) -> Self {
+        Self {
+            storage_type,
+            section_type,
+            location,
+            value,
+            time_stamp,
+            // access_type: access_type,
         }
     }
 }
