@@ -1,9 +1,11 @@
+#[derive(Debug)]
 pub enum StorageType {
     Memory = 0,
     Stack = 1,
     Undefined = 2,
 }
 
+#[derive(Debug)]
 pub enum SectionType {
     CodeImage = 0,
     InitialMemory = 1,
@@ -18,6 +20,7 @@ pub enum SectionType {
 //     Write = 1,
 // }
 
+#[derive(Debug)]
 pub struct StorageReadRecord {
     storage_type: StorageType,
     section_type: SectionType,
@@ -46,6 +49,7 @@ impl StorageReadRecord {
     }
 }
 
+#[derive(Debug)]
 pub struct StorageWriteRecord {
     storage_type: StorageType,
     section_type: SectionType,
