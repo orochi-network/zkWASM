@@ -109,7 +109,7 @@ impl WasmContext {
                 println!(
                     "{}|{}\tlocal.get\t{} i64 {}",
                     self.pc,
-                    self.iaddr - 1,
+                    self.iaddr,
                     param_index,
                     param
                 );
@@ -146,7 +146,7 @@ impl WasmContext {
 
 
                 // collect trace
-                self.state_trace_manager.collect_0x7c(&mut self.time_stamp, self.pc, self.iaddr);
+                // self.state_trace_manager.collect_0x7c(&mut self.time_stamp, self.pc, self.iaddr);
 
                 WasmOpcode::I64Add(a, b)
             }
