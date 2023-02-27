@@ -11,3 +11,6 @@ Cargo.lock
 
 # Remove IDEA related files
 .idea
+
+# Remove VSCode related files
+.vscode
