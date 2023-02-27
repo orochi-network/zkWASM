@@ -29,32 +29,3 @@ impl StorageReadRecord {
         }
     }
 }
-
-#[derive(Debug)]
-pub struct StorageWriteRecord {
-    storage_type: StorageType,
-    section_type: SectionType,
-    location: u64,
-    value: u64,
-    time_stamp: u64,
-    // access_type: AccessType,
-}
-
-impl StorageWriteRecord {
-    pub fn new(storage_type: StorageType,
-               section_type: SectionType,
-               location: u64,
-               value: u64,
-               time_stamp: u64,
-               // access_type: AccessType
-    ) -> Self {
-        Self {
-            storage_type,
-            section_type,
-            location,
-            value,
-            time_stamp,
-            // access_type: access_type,
-        }
-    }
-}

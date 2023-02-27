@@ -1,8 +1,9 @@
 use crate::trace::section_type::SectionType;
 use crate::trace::state_trace_manager::StateTraceManager;
 use crate::trace::state_trace_tuple::{MAX_NUM_READ_LOCATIONS, StateTraceTuple};
-use crate::trace::storage_access_record::{StorageReadRecord, StorageWriteRecord};
+use crate::trace::storage_read_record::{StorageReadRecord};
 use crate::trace::storage_type::StorageType;
+use crate::trace::storage_write_record::StorageWriteRecord;
 use crate::util::{
     util,
     constant_setting
