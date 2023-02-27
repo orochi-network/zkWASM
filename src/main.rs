@@ -1,6 +1,4 @@
-use zkwasm::context::WasmContext;
-
-use zkwasm;
+use zkwasm::context::context::WasmContext;
 
 fn main() {
     /*

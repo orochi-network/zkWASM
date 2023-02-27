@@ -1,24 +1,5 @@
-#[derive(Debug)]
-pub enum StorageType {
-    Memory = 0,
-    Stack = 1,
-    Undefined = 2,
-}
-
-#[derive(Debug)]
-pub enum SectionType {
-    CodeImage = 0,
-    InitialMemory = 1,
-    ExecutableImage = 2,
-    ProgramMemory = 3,
-    Stack = 4,
-    Undefined = 5,
-}
-
-// pub enum AccessType {
-//     Read = 0,
-//     Write = 1,
-// }
+use crate::trace::section_type::SectionType;
+use crate::trace::storage_type::StorageType;
 
 #[derive(Debug)]
 pub struct StorageReadRecord {

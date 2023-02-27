@@ -8,4 +8,4 @@ impl ConstantValue for u64 {
     const ONE: Self = 1;
 }
 
-pub const MAX_NUM_BYTES_FOR_LOCAL_GET: u8 = 8;
+pub const NUM_BYTES_FOR_LOCAL_GET: usize = 8;

@@ -1,37 +1,48 @@
+use crate::trace::section_type::SectionType;
 use crate::trace::state_trace_manager::StateTraceManager;
-use crate::trace::state_trace_tuple::MAX_NUM_READ_LOCATIONS;
-use crate::trace::storage_access_record::{SectionType, StorageReadRecord, StorageType};
+use crate::trace::state_trace_tuple::{MAX_NUM_READ_LOCATIONS, StateTraceTuple};
+use crate::trace::storage_access_record::{StorageReadRecord, StorageWriteRecord};
+use crate::trace::storage_type::StorageType;
 use crate::util::{
     util,
     constant_setting
 };
-use crate::util::constant_setting::MAX_NUM_BYTES_FOR_LOCAL_GET;
+use crate::util::constant_setting::NUM_BYTES_FOR_LOCAL_GET;
 
 impl StateTraceManager {
     pub fn collect_0x20(
         &mut self,
-        time_stamp: &mut u64,
-        pc: u64,
-        iaddr: u64, iaddr_section_type: SectionType, param_index: u64,
-        read_first_index: u64, read_values: [u8; MAX_NUM_BYTES_FOR_LOCAL_GET as usize],
+        time_stamp_before_executing: &mut u64,
+        pc_before_executing: u64,
+        iaddr_before_executing: u64,
+        stack_depth_before_executing: usize,
+        section_type_of_param_index: SectionType,
+        param_index: u64,
+        section_types_of_read_locations: &[SectionType; NUM_BYTES_FOR_LOCAL_GET],
+        first_index_read: u64,
+        read_bytes: &[u8; NUM_BYTES_FOR_LOCAL_GET],
+        pushed_stack_value: u64,
     ) {
         let read_locations = {
             let mut res = Vec::<StorageReadRecord>::new();
             res.push(
                 StorageReadRecord::new(
                     StorageType::Memory,
-                    iaddr_section_type,
-                    iaddr,
+                    section_type_of_param_index,
+                    iaddr_before_executing as u64,
                     param_index,
-                    util::get_value_and_increase::<u64>(time_stamp)
+                    util::get_value_and_increase::<u64>(time_stamp_before_executing)
                 )
             );
 
-            for i in 0..MAX_NUM_BYTES_FOR_LOCAL_GET {
+            for i in 0..NUM_BYTES_FOR_LOCAL_GET {
                 res.push(
                     StorageReadRecord::new(
                         StorageType::Memory,
-                        SectionType::ProgramMemory
+                        section_types_of_read_locations[i].clone(),
+                        first_index_read + i as u64,
+                        read_bytes[i] as u64,
+                        util::get_value_and_increase::<u64>(time_stamp_before_executing)
                     )
                 );
             }
@@ -39,28 +50,39 @@ impl StateTraceManager {
             res.try_into().unwrap()
         };
 
-            // (0..MAX_NUM_READ_LOCATIONS)
-            // .into_iter()
-            // .map(
-            //     |i|
-            //         match i {
-            //             0 => { // recording location
-            //                 StorageReadRecord::new(
-            //                     StorageType::Memory,
-            //                     iaddr_section_type,
-            //                     iaddr,
-            //                     param_index,
-            //                     util::get_value_and_increase::<u64>(time_stamp)
-            //                 )
-            //             },
-            //             1..=(1 + MAX_NUM_BYTES_FOR_LOCAL_GET) => {
-            //                 StorageReadRecord::new(
-            //
-            //                 )
-            //             }
-            //     }
-            // ).collect::<Vec<StorageReadRecord>>()
-            // .try_into()
-            // .unwrap();
+        let write_locations = {
+            let mut res = Vec::<StorageWriteRecord>::new();
+            res.push(
+                StorageWriteRecord::new(
+                    StorageType::Stack,
+                    SectionType::Stack,
+                    stack_depth_before_executing as u64,
+                    pushed_stack_value,
+                    util::get_value_and_increase::<u64>(time_stamp_before_executing)
+                )
+            );
+
+            res.push(
+                StorageWriteRecord::new(
+                    StorageType::Undefined,
+                    SectionType::Undefined,
+                    0,
+                    0,
+                    util::get_value_and_increase::<u64>(time_stamp_before_executing),
+                )
+            );
+
+            res.try_into().unwrap()
+        };
+
+        self.add_state_trace_tuple(
+            StateTraceTuple::new(
+                pc_before_executing,
+                iaddr_before_executing,
+                stack_depth_before_executing,
+                read_locations,
+                write_locations,
+            )
+        );
     }
 }
