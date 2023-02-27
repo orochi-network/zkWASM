@@ -1,19 +1,18 @@
-use crate::trace::section_type::SectionType;
-use crate::trace::state_trace_manager::StateTraceManager;
-use crate::trace::state_trace_tuple;
-use crate::trace::state_trace_tuple::{StateTraceTuple};
-use crate::trace::storage_read_record::{StorageReadRecord};
-use crate::trace::storage_type::StorageType;
-use crate::trace::storage_write_record::StorageWriteRecord;
-use crate::util::{util, constant_setting::ConstantValue};
+use crate::proof_context::proof_context::ProofContext;
+use crate::proof_context::trace::section_type::SectionType;
+use crate::proof_context::trace::state_trace_manager::StateTraceManager;
+use crate::proof_context::trace::state_trace_tuple;
+use crate::proof_context::trace::state_trace_tuple::StateTraceTuple;
+use crate::proof_context::trace::storage_read_record::StorageReadRecord;
+use crate::proof_context::trace::storage_type::StorageType;
+use crate::proof_context::trace::storage_write_record::StorageWriteRecord;
 
-impl StateTraceManager {
-    pub fn collect_0x0b(
+impl ProofContext {
+    pub fn collect_trace_opcode_end(
         &mut self,
-        time_stamp_before_executing: &mut u64,
-        pc_before_executing: u64,
-        iaddr_before_executing: u64,
-        stack_depth_before_executing: usize,
+        pc_before_executing: &u64,
+        iaddr_before_executing: &u64,
+        stack_depth_before_executing: &usize,
     ) {
         let read_locations: [StorageReadRecord; state_trace_tuple::MAX_NUM_READ_LOCATIONS] =
             (0..state_trace_tuple::MAX_NUM_READ_LOCATIONS).into_iter().map(|_|
@@ -22,7 +21,7 @@ impl StateTraceManager {
                     SectionType::Undefined,
                     0,
                     0,
-                    util::get_value_and_increase::<u64>(time_stamp_before_executing),
+                    self.get_time_stamp_then_increase(),
                 )
             ).collect::<Vec<StorageReadRecord>>().try_into().unwrap();
 
@@ -33,15 +32,15 @@ impl StateTraceManager {
                     SectionType::Undefined,
                     0,
                     0,
-                    util::get_value_and_increase::<u64>(time_stamp_before_executing),
+                    self.get_time_stamp_then_increase(),
                 )
             ).collect::<Vec<StorageWriteRecord>>().try_into().unwrap();
 
         self.add_state_trace_tuple(
-            StateTraceTuple::new(
-                pc_before_executing,
-                iaddr_before_executing,
-                stack_depth_before_executing,
+            &StateTraceTuple::new(
+                pc_before_executing.clone(),
+                iaddr_before_executing.clone(),
+                stack_depth_before_executing.clone(),
                 read_locations,
                 write_locations,
             )

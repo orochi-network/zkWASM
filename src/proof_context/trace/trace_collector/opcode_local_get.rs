@@ -1,19 +1,15 @@
-use crate::trace::section_type::SectionType;
-use crate::trace::state_trace_manager::StateTraceManager;
-use crate::trace::state_trace_tuple::{MAX_NUM_READ_LOCATIONS, StateTraceTuple};
-use crate::trace::storage_read_record::{StorageReadRecord};
-use crate::trace::storage_type::StorageType;
-use crate::trace::storage_write_record::StorageWriteRecord;
-use crate::util::{
-    util,
-    constant_setting
-};
+use crate::proof_context::proof_context::ProofContext;
+use crate::proof_context::trace::section_type::SectionType;
+use crate::proof_context::trace::state_trace_manager::StateTraceManager;
+use crate::proof_context::trace::state_trace_tuple::StateTraceTuple;
+use crate::proof_context::trace::storage_read_record::StorageReadRecord;
+use crate::proof_context::trace::storage_type::StorageType;
+use crate::proof_context::trace::storage_write_record::StorageWriteRecord;
 use crate::util::constant_setting::NUM_BYTES_FOR_LOCAL_GET;
 
-impl StateTraceManager {
-    pub fn collect_0x20(
+impl ProofContext {
+    pub fn collect_trace_opcode_local_get(
         &mut self,
-        time_stamp_before_executing: &mut u64,
         pc_before_executing: u64,
         iaddr_before_executing: u64,
         stack_depth_before_executing: usize,
@@ -32,7 +28,7 @@ impl StateTraceManager {
                     section_type_of_param_index,
                     iaddr_before_executing as u64,
                     param_index,
-                    util::get_value_and_increase::<u64>(time_stamp_before_executing)
+                    self.get_time_stamp_then_increase()
                 )
             );
 
@@ -43,7 +39,7 @@ impl StateTraceManager {
                         section_types_of_read_locations[i].clone(),
                         first_index_read + i as u64,
                         read_bytes[i] as u64,
-                        util::get_value_and_increase::<u64>(time_stamp_before_executing)
+                        self.get_time_stamp_then_increase()
                     )
                 );
             }
@@ -59,7 +55,7 @@ impl StateTraceManager {
                     SectionType::Stack,
                     stack_depth_before_executing as u64,
                     pushed_stack_value,
-                    util::get_value_and_increase::<u64>(time_stamp_before_executing)
+                    self.get_time_stamp_then_increase()
                 )
             );
 
@@ -69,7 +65,7 @@ impl StateTraceManager {
                     SectionType::Undefined,
                     0,
                     0,
-                    util::get_value_and_increase::<u64>(time_stamp_before_executing),
+                    self.get_time_stamp_then_increase(),
                 )
             );
 
@@ -77,7 +73,7 @@ impl StateTraceManager {
         };
 
         self.add_state_trace_tuple(
-            StateTraceTuple::new(
+            &StateTraceTuple::new(
                 pc_before_executing,
                 iaddr_before_executing,
                 stack_depth_before_executing,

@@ -1,6 +1,5 @@
-pub mod context;
+pub mod wasm_context;
 pub mod memory;
 pub mod opcode;
-pub mod trace;
-pub mod trace_collector;
 pub mod util;
+pub mod proof_context;
