@@ -13,6 +13,7 @@ impl ProofContext {
         pc_before_executing: &u64,
         iaddr_before_executing: &u64,
         stack_depth_before_executing: &usize,
+        byte_code: &u16,
     ) {
         let read_locations: [StorageReadRecord; state_trace_tuple::MAX_NUM_READ_LOCATIONS] =
             (0..state_trace_tuple::MAX_NUM_READ_LOCATIONS).into_iter().map(|_|
@@ -41,6 +42,7 @@ impl ProofContext {
                 pc_before_executing.clone(),
                 iaddr_before_executing.clone(),
                 stack_depth_before_executing.clone(),
+                byte_code.clone(),
                 read_locations,
                 write_locations,
             )

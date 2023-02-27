@@ -23,12 +23,12 @@ impl WasmContext {
         // Matching byte_code to Wasm opcode
         match byte_code {
             0x0b => self.execute_opcode_end(
-                proof_context,
-                &pc_before_executing, &iaddr_before_executing, &stack_depth_before_executing,
+                proof_context, &pc_before_executing, &iaddr_before_executing,
+                &stack_depth_before_executing, &byte_code,
             ),
             0x20 => self.execute_opcode_i64_local_get(
-                proof_context,
-                &pc_before_executing, &iaddr_before_executing, &stack_depth_before_executing,
+                proof_context, &pc_before_executing, &iaddr_before_executing,
+                &stack_depth_before_executing, &byte_code,
             ),
             0x7c => self.execute_opcode_i64_add(
                 proof_context,

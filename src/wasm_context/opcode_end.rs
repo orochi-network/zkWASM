@@ -9,6 +9,7 @@ impl WasmContext {
         pc_before_executing: &u64,
         iaddr_before_executing: &u64,
         stack_depth_before_executing: &usize,
+        byte_code: &u16,
     ) -> WasmOpcode {
         println!("{}|{}\tend", self.get_pc().clone(), self.get_iaddr().clone());
         self.inc_iaddr(1);
@@ -19,6 +20,7 @@ impl WasmContext {
             pc_before_executing,
             iaddr_before_executing,
             stack_depth_before_executing,
+            byte_code,
         );
         WasmOpcode::End
     }

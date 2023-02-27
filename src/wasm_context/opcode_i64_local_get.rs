@@ -12,6 +12,7 @@ impl WasmContext {
         pc_before_executing: &u64,
         iaddr_before_executing: &u64,
         stack_depth_before_executing: &usize,
+        byte_code: &u16,
     ) -> WasmOpcode {
         // Seek iaddr to param index
         self.inc_iaddr(1);
@@ -70,6 +71,7 @@ impl WasmContext {
             pc_before_executing.clone(),
             iaddr_before_executing.clone(),
             stack_depth_before_executing.clone(),
+            byte_code.clone(),
             section_type_of_param_index,
             param_index as u64,
             &section_types_of_read_locations,

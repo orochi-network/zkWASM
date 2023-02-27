@@ -1,7 +1,7 @@
 use crate::proof_context::proof_context::ProofContext;
 use crate::proof_context::trace::section_type::SectionType;
 use crate::proof_context::trace::state_trace_manager::StateTraceManager;
-use crate::proof_context::trace::state_trace_tuple::StateTraceTuple;
+use crate::proof_context::trace::state_trace_tuple::{MAX_NUM_WRITE_LOCATIONS, StateTraceTuple};
 use crate::proof_context::trace::storage_read_record::StorageReadRecord;
 use crate::proof_context::trace::storage_type::StorageType;
 use crate::proof_context::trace::storage_write_record::StorageWriteRecord;
@@ -13,6 +13,7 @@ impl ProofContext {
         pc_before_executing: u64,
         iaddr_before_executing: u64,
         stack_depth_before_executing: usize,
+        byte_code: u16,
         section_type_of_param_index: SectionType,
         param_index: u64,
         section_types_of_read_locations: &[SectionType; NUM_BYTES_FOR_LOCAL_GET],
@@ -77,6 +78,7 @@ impl ProofContext {
                 pc_before_executing,
                 iaddr_before_executing,
                 stack_depth_before_executing,
+                byte_code,
                 read_locations,
                 write_locations,
             )
