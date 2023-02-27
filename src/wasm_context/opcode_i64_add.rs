@@ -11,7 +11,9 @@ impl WasmContext {
         iaddr_before_executing: &u64,
         stack_depth_before_executing: &usize,
     ) -> WasmOpcode {
-        let (b, a) = (self.stack_pop(), self.stack_pop());
+        let b = self.stack_pop();
+
+        let a = self.stack_pop();
         // Let's consider this is a cheat
         // we put the result to memory, to check the ability to write
         // Don't expect the Wasm runtime have the same behaviour
@@ -28,7 +30,7 @@ impl WasmContext {
 
 
         // collect trace
-        // self.state_trace_manager.collect_0x7c(&mut self.time_stamp, self.pc, self.iaddr);
+        proof_context.collect_trace_opcode_i64_add(&mut self.time_stamp, self.pc, self.iaddr);
 
         WasmOpcode::I64Add(a, b)
     }
