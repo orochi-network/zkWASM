@@ -60,15 +60,7 @@ impl ProofContext {
                 )
             );
 
-            res.push(
-                StorageWriteRecord::new(
-                    StorageType::Undefined,
-                    SectionType::Undefined,
-                    0,
-                    0,
-                    self.get_time_stamp_then_increase(),
-                )
-            );
+            res.push(StorageWriteRecord::dummy(&self.get_time_stamp_then_increase()));
 
             res.try_into().unwrap()
         };
