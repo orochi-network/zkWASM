@@ -17,12 +17,12 @@ impl ProofContext {
     ) {
         let read_locations: [StorageReadRecord; state_trace_tuple::MAX_NUM_READ_LOCATIONS] =
             (0..state_trace_tuple::MAX_NUM_READ_LOCATIONS).into_iter().map(|_|
-                StorageReadRecord::dummy(&self.get_time_stamp_then_increase())
+                StorageReadRecord::dummy(self.get_time_stamp_then_increase())
             ).collect::<Vec<StorageReadRecord>>().try_into().unwrap();
 
         let write_locations: [StorageWriteRecord; state_trace_tuple::MAX_NUM_WRITE_LOCATIONS] =
             (0..state_trace_tuple::MAX_NUM_WRITE_LOCATIONS).into_iter().map(|_|
-                StorageWriteRecord::dummy(&self.get_time_stamp_then_increase())
+                StorageWriteRecord::dummy(self.get_time_stamp_then_increase())
             ).collect::<Vec<StorageWriteRecord>>().try_into().unwrap();
 
         self.add_state_trace_tuple(

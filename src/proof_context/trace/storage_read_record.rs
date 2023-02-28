@@ -29,13 +29,13 @@ impl StorageReadRecord {
         }
     }
 
-    pub fn dummy(time_stamp: &u64) -> Self {
+    pub fn dummy(time_stamp: u64) -> Self {
         Self::new(
             StorageType::Undefined,
             SectionType::Undefined,
             0,
             0,
-            time_stamp.clone(),
+            time_stamp,
         )
     }
 }

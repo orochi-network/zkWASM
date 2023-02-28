@@ -59,8 +59,9 @@ impl ProofContext {
                     self.get_time_stamp_then_increase()
                 )
             );
-
-            res.push(StorageWriteRecord::dummy(&self.get_time_stamp_then_increase()));
+            for _ in 1..MAX_NUM_WRITE_LOCATIONS {
+                res.push(StorageWriteRecord::dummy(self.get_time_stamp_then_increase()));
+            }
 
             res.try_into().unwrap()
         };

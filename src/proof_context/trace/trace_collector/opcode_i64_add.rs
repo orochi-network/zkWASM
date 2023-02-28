@@ -41,6 +41,10 @@ impl ProofContext {
                 )
             );
 
+            for _ in 2..MAX_NUM_READ_LOCATIONS {
+                res.push(StorageReadRecord::dummy(self.get_time_stamp_then_increase()));
+            }
+
             res.try_into().unwrap()
         };
         let write_locations = {

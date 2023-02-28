@@ -45,7 +45,7 @@ impl WasmContext {
         ] = (0..NUM_BYTES_FOR_LOCAL_GET).into_iter().map(|i|
             SectionType::from_memory_section(
                 &self.get_mut_memory().get_section_from_offset(
-                    start_index + 1
+                    start_index + i as u64
                 )
             )
         ).collect::<Vec<SectionType>>().try_into().unwrap();
