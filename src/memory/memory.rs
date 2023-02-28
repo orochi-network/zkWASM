@@ -101,9 +101,9 @@ impl<'a> Memory<'a> for WasmMemory {
                 if res == MemorySection::Undefined {
                     res = section.clone();
                 } else {
-                    let (section_starting_offset, _) = self.get_section_size_from_section(&section);
-                    if section_starting_offset <= offset && largest_reached_offset < section_starting_offset {
-                        largest_reached_offset = section_starting_offset;
+                    let (section_start_offset, _) = self.get_section_size_from_section(&section);
+                    if section_start_offset <= offset && largest_reached_offset < section_start_offset {
+                        largest_reached_offset = section_start_offset;
                         res = section.clone();
                     }
                 }

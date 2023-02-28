@@ -30,12 +30,12 @@ impl WasmContext {
         // Section 1 is initial memory, i'm to lazy to create a constant
         // We don't have the WASI https://wasi.dev/ that's why I implement in this way.
         // I put the param in initial memory
-        let (param_starting, _) = self.get_mut_memory().get_section_size_from_section_index(1);
+        let (param_start, _) = self.get_mut_memory().get_section_size_from_section_index(1);
         // TODO: change 1 above to constant
 
-        let starting_index = param_starting + (param_index as u64 * 8);
+        let start_index = param_start + (param_index as u64 * 8);
         let read_bytes: [u8; 8] = self.get_mut_memory()
-            .read(starting_index, 8)
+            .read(start_index, 8)
             .try_into()
             .unwrap();
         // TODO: possibly change 8 above to constant
@@ -45,7 +45,7 @@ impl WasmContext {
         ] = (0..NUM_BYTES_FOR_LOCAL_GET).into_iter().map(|i|
             SectionType::from_memory_section(
                 &self.get_mut_memory().get_section_from_offset(
-                    starting_index + 1
+                    start_index + 1
                 )
             )
         ).collect::<Vec<SectionType>>().try_into().unwrap();
@@ -75,7 +75,7 @@ impl WasmContext {
             section_type_of_param_index,
             param_index as u64,
             &section_types_of_read_locations,
-            starting_index,
+            start_index,
             &read_bytes,
             param,
         );
