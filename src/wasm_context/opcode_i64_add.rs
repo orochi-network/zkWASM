@@ -30,7 +30,8 @@ impl WasmContext {
 
 
         // collect trace
-        proof_context.collect_trace_opcode_i64_add(&mut self.time_stamp, self.pc, self.iaddr);
+        // proof_context.collect_trace_opcode_i64_add(&mut self.time_stamp, self.pc, self.iaddr);
+        // TODO: fix the line above
 
         WasmOpcode::I64Add(a, b)
     }
