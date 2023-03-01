@@ -1,6 +1,5 @@
-use zkwasm::context::WasmContext;
-
-use zkwasm;
+use zkwasm::proof_context::proof_context::ProofContext;
+use zkwasm::wasm_context::wasm_context::WasmContext;
 
 fn main() {
     /*
@@ -11,6 +10,9 @@ fn main() {
 
     [0x20, 0x00, 0x20, 0x1, 0x7c, 0xb]
     */
+
+    let mut proof_context = ProofContext::new();
+
     let mut a = WasmContext::new(
         &[0x20u8, 0x00, 0x20, 0x1, 0x7c, 0xb],
         &[
@@ -18,8 +20,8 @@ fn main() {
         ],
     );
 
-    a.next();
-    a.next();
-    a.next();
-    a.next();
+    a.next(&mut proof_context);
+    a.next(&mut proof_context);
+    a.next(&mut proof_context);
+    a.next(&mut proof_context);
 }
