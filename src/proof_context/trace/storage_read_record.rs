@@ -1,5 +1,5 @@
-use crate::proof_context::trace::section_type::SectionType;
-use crate::proof_context::trace::storage_type::StorageType;
+use crate::proof_context::trace::r#type::section_type::SectionType;
+use crate::proof_context::trace::r#type::storage_type::StorageType;
 
 #[derive(Debug, Clone)]
 pub struct StorageReadRecord {

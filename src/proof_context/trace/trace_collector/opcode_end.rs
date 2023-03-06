@@ -1,10 +1,8 @@
 use crate::proof_context::proof_context::ProofContext;
-use crate::proof_context::trace::section_type::SectionType;
 use crate::proof_context::trace::state_trace_manager::StateTraceManager;
 use crate::proof_context::trace::state_trace_tuple;
 use crate::proof_context::trace::state_trace_tuple::StateTraceTuple;
 use crate::proof_context::trace::storage_read_record::StorageReadRecord;
-use crate::proof_context::trace::storage_type::StorageType;
 use crate::proof_context::trace::storage_write_record::StorageWriteRecord;
 
 impl ProofContext {

@@ -1,9 +1,9 @@
 use crate::proof_context::proof_context::ProofContext;
-use crate::proof_context::trace::section_type::SectionType;
+use crate::proof_context::trace::r#type::section_type::SectionType;
+use crate::proof_context::trace::r#type::storage_type::StorageType;
 use crate::proof_context::trace::state_trace_manager::StateTraceManager;
 use crate::proof_context::trace::state_trace_tuple::{MAX_NUM_WRITE_LOCATIONS, StateTraceTuple};
 use crate::proof_context::trace::storage_read_record::StorageReadRecord;
-use crate::proof_context::trace::storage_type::StorageType;
 use crate::proof_context::trace::storage_write_record::StorageWriteRecord;
 use crate::util::constant_setting::NUM_BYTES_FOR_LOCAL_GET;
 

@@ -1,7 +1,7 @@
 use crate::memory::memory::Memory;
 use crate::opcode::wasm_opcode::WasmOpcode;
 use crate::proof_context::proof_context::ProofContext;
-use crate::proof_context::trace::section_type::SectionType;
+use crate::proof_context::trace::r#type::section_type::SectionType;
 use crate::wasm_context::wasm_context::WasmContext;
 
 impl WasmContext {
