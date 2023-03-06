@@ -1,10 +1,10 @@
-use crate::proof_context::trace::r#type::section_type::SectionType;
-use crate::proof_context::trace::r#type::storage_type::StorageType;
+use crate::proof_context::trace::proof_type::proof_section_type::ProofSectionType;
+use crate::proof_context::trace::proof_type::proof_storage_type::ProofStorageType;
 
 #[derive(Debug, Clone)]
 pub struct StorageReadRecord {
-    storage_type: StorageType,
-    section_type: SectionType,
+    storage_type: ProofStorageType,
+    section_type: ProofSectionType,
     location: u64,
     value: u64,
     time_stamp: u64,
@@ -12,8 +12,8 @@ pub struct StorageReadRecord {
 }
 
 impl StorageReadRecord {
-    pub fn new(storage_type: StorageType,
-               section_type: SectionType,
+    pub fn new(storage_type: ProofStorageType,
+               section_type: ProofSectionType,
                location: u64,
                value: u64,
                time_stamp: u64,
@@ -31,8 +31,8 @@ impl StorageReadRecord {
 
     pub fn dummy(time_stamp: u64) -> Self {
         Self::new(
-            StorageType::Undefined,
-            SectionType::Undefined,
+            ProofStorageType::Undefined,
+            ProofSectionType::Undefined,
             0,
             0,
             time_stamp,

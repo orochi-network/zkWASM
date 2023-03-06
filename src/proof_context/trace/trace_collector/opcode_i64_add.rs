@@ -1,6 +1,7 @@
 use crate::proof_context::proof_context::ProofContext;
-use crate::proof_context::trace::r#type::section_type::SectionType;
-use crate::proof_context::trace::r#type::storage_type::StorageType;
+use crate::proof_context::trace::proof_type::proof_opcode::ProofOpcode;
+use crate::proof_context::trace::proof_type::proof_section_type::ProofSectionType;
+use crate::proof_context::trace::proof_type::proof_storage_type::ProofStorageType;
 use crate::proof_context::trace::state_trace_manager::StateTraceManager;
 use crate::proof_context::trace::state_trace_tuple::{MAX_NUM_READ_LOCATIONS, StateTraceTuple};
 use crate::proof_context::trace::storage_read_record::StorageReadRecord;
@@ -12,19 +13,18 @@ impl ProofContext {
         pc_before_executing: u64,
         iaddr_before_executing: u64,
         stack_depth_before_executing: usize,
-        byte_code: u16,
         b_location: u64, b: u64,
         a_location: u64, a: u64,
-        addition_result_in_section_types: &[SectionType; 8],
+        addition_result_in_section_types: [ProofSectionType; 8],
         addition_result_starting_location: u64,
-        addition_result_in_bytes: &[u8; 8],
-    ) {
+        addition_result_in_bytes: [u8; 8],
+    ) -> ProofOpcode {
         let read_locations: [StorageReadRecord; MAX_NUM_READ_LOCATIONS] = {
             let mut res = Vec::<StorageReadRecord>::new();
             res.push(
                 StorageReadRecord::new(
-                    StorageType::Stack,
-                    SectionType::Stack,
+                    ProofStorageType::Stack,
+                    ProofSectionType::Stack,
                     b_location,
                     b,
                     self.get_time_stamp_then_increase()
@@ -33,8 +33,8 @@ impl ProofContext {
 
             res.push(
                 StorageReadRecord::new(
-                    StorageType::Stack,
-                    SectionType::Stack,
+                    ProofStorageType::Stack,
+                    ProofSectionType::Stack,
                     a_location,
                     a,
                     self.get_time_stamp_then_increase()
@@ -52,7 +52,7 @@ impl ProofContext {
             for i in 0..8 {
                 res.push(
                     StorageWriteRecord::new(
-                        StorageType::Memory,
+                        ProofStorageType::Memory,
                         addition_result_in_section_types[i].clone(),
                         addition_result_starting_location + i as u64,
                         addition_result_in_bytes[i] as u64,
@@ -64,15 +64,19 @@ impl ProofContext {
             res.try_into().unwrap()
         };
 
+        let proof_opcode = ProofOpcode::I64Add;
+
         self.add_state_trace_tuple(
             &StateTraceTuple::new(
                 pc_before_executing,
                 iaddr_before_executing,
                 stack_depth_before_executing,
-                byte_code,
+                proof_opcode.clone(),
                 read_locations,
                 write_locations,
             )
         );
+
+        proof_opcode
     }
 }

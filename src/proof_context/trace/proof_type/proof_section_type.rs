@@ -1,7 +1,7 @@
 use crate::memory::memory::MemorySection;
 
 #[derive(Debug, Clone)]
-pub enum SectionType {
+pub enum ProofSectionType {
     CodeImage = 0,
     InitialMemory = 1,
     ExecutableImage = 2,
@@ -10,7 +10,7 @@ pub enum SectionType {
     Undefined = 5,
 }
 
-impl SectionType {
+impl ProofSectionType {
     pub fn from_memory_section(memory_section: &MemorySection) -> Self {
         match memory_section {
             MemorySection::Undefined => Self::Undefined,

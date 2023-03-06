@@ -1,7 +1,8 @@
 use crate::memory::memory::Memory;
 use crate::opcode::wasm_opcode::WasmOpcode;
 use crate::proof_context::proof_context::ProofContext;
-use crate::proof_context::trace::r#type::section_type::SectionType;
+use crate::proof_context::trace::proof_type::proof_opcode::ProofOpcode;
+use crate::proof_context::trace::proof_type::proof_section_type::ProofSectionType;
 use crate::util::constant_setting::NUM_BYTES_FOR_LOCAL_GET;
 use crate::wasm_context::wasm_context::WasmContext;
 
@@ -12,8 +13,7 @@ impl WasmContext {
         pc_before_executing: &u64,
         iaddr_before_executing: &u64,
         stack_depth_before_executing: &usize,
-        byte_code: &u16,
-    ) -> WasmOpcode {
+    ) -> (WasmOpcode, ProofOpcode) {
         // Seek iaddr to param index
         self.inc_iaddr(1);
         let param_index = {
@@ -22,7 +22,7 @@ impl WasmContext {
         };
         let section_type_of_param_index = {
             let current_iaddr = self.get_iaddr().clone();
-            SectionType::from_memory_section(
+            ProofSectionType::from_memory_section(
                 &self.get_mut_memory().get_section_from_offset(current_iaddr)
             )
         };
@@ -40,15 +40,15 @@ impl WasmContext {
             .unwrap();
         // TODO: possibly change 8 above to constant
         let section_types_of_read_locations: [
-            SectionType;
+            ProofSectionType;
             NUM_BYTES_FOR_LOCAL_GET
         ] = (0..NUM_BYTES_FOR_LOCAL_GET).into_iter().map(|i|
-            SectionType::from_memory_section(
+            ProofSectionType::from_memory_section(
                 &self.get_mut_memory().get_section_from_offset(
                     start_index + i as u64
                 )
             )
-        ).collect::<Vec<SectionType>>().try_into().unwrap();
+        ).collect::<Vec<ProofSectionType>>().try_into().unwrap();
         // i64 is 8 bytes
         let param = u64::from_be_bytes(read_bytes);
 
@@ -67,11 +67,10 @@ impl WasmContext {
         self.inc_pc();
 
         // collect trace
-        proof_context.collect_trace_opcode_local_get(
+        let proof_opcode = proof_context.collect_trace_opcode_local_get(
             pc_before_executing.clone(),
             iaddr_before_executing.clone(),
             stack_depth_before_executing.clone(),
-            byte_code.clone(),
             section_type_of_param_index,
             param_index as u64,
             &section_types_of_read_locations,
@@ -80,6 +79,6 @@ impl WasmContext {
             param,
         );
         // 0xfe is i64
-        WasmOpcode::LocalGet(param_index, 0xfe)
+        (WasmOpcode::LocalGet(param_index, 0xfe), proof_opcode)
     }
 }

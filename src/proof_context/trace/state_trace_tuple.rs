@@ -1,3 +1,4 @@
+use crate::proof_context::trace::proof_type::proof_opcode::ProofOpcode;
 use crate::proof_context::trace::storage_read_record::StorageReadRecord;
 use crate::proof_context::trace::storage_write_record::StorageWriteRecord;
 
@@ -9,7 +10,7 @@ pub struct StateTraceTuple {
     pc_before_executing: u64,
     iaddr_before_executing: u64,
     stack_depth_before_executing: usize,
-    byte_code: u16,
+    proof_opcode: ProofOpcode,
     read_locations: [StorageReadRecord; MAX_NUM_READ_LOCATIONS],
     write_locations: [StorageWriteRecord; MAX_NUM_WRITE_LOCATIONS],
 }
@@ -19,7 +20,7 @@ impl StateTraceTuple {
         pc_before_executing: u64,
         iaddr_before_executing: u64,
         stack_depth_before_executing: usize,
-        byte_code: u16,
+        proof_opcode: ProofOpcode,
         read_locations: [StorageReadRecord; MAX_NUM_READ_LOCATIONS],
         write_locations: [StorageWriteRecord; MAX_NUM_WRITE_LOCATIONS],
     ) -> Self {
@@ -27,7 +28,7 @@ impl StateTraceTuple {
             pc_before_executing,
             iaddr_before_executing,
             stack_depth_before_executing,
-            byte_code,
+            proof_opcode,
             read_locations,
             write_locations,
         }

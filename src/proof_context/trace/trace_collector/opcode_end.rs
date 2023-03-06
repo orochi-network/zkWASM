@@ -1,4 +1,5 @@
 use crate::proof_context::proof_context::ProofContext;
+use crate::proof_context::trace::proof_type::proof_opcode::ProofOpcode;
 use crate::proof_context::trace::state_trace_manager::StateTraceManager;
 use crate::proof_context::trace::state_trace_tuple;
 use crate::proof_context::trace::state_trace_tuple::StateTraceTuple;
@@ -11,8 +12,7 @@ impl ProofContext {
         pc_before_executing: &u64,
         iaddr_before_executing: &u64,
         stack_depth_before_executing: &usize,
-        byte_code: &u16,
-    ) {
+    ) -> ProofOpcode {
         let read_locations: [StorageReadRecord; state_trace_tuple::MAX_NUM_READ_LOCATIONS] =
             (0..state_trace_tuple::MAX_NUM_READ_LOCATIONS).into_iter().map(|_|
                 StorageReadRecord::dummy(self.get_time_stamp_then_increase())
@@ -23,15 +23,19 @@ impl ProofContext {
                 StorageWriteRecord::dummy(self.get_time_stamp_then_increase())
             ).collect::<Vec<StorageWriteRecord>>().try_into().unwrap();
 
+        let proof_opcode = ProofOpcode::End;
+
         self.add_state_trace_tuple(
             &StateTraceTuple::new(
                 pc_before_executing.clone(),
                 iaddr_before_executing.clone(),
                 stack_depth_before_executing.clone(),
-                byte_code.clone(),
+                proof_opcode.clone(),
                 read_locations,
                 write_locations,
             )
         );
+
+        proof_opcode
     }
 }
