@@ -1,6 +1,4 @@
 use crate::memory::memory::{Memory, MemorySection, WasmMemory};
-use crate::opcode::wasm_opcode::WasmOpcode;
-use crate::util::constant_setting::NUM_BYTES_FOR_LOCAL_GET;
 
 pub struct WasmContext {
     pc: u64,

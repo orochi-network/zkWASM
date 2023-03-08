@@ -1,9 +1,8 @@
 use crate::wasm_context::wasm_context::WasmContext;
-use crate::memory::memory::{Memory, MemorySection, WasmMemory};
+use crate::memory::memory::Memory;
 use crate::opcode::wasm_opcode::WasmOpcode;
 use crate::proof_context::proof_context::ProofContext;
 use crate::proof_context::trace::proof_type::proof_opcode::ProofOpcode;
-use crate::util::constant_setting::NUM_BYTES_FOR_LOCAL_GET;
 
 impl WasmContext {
 
