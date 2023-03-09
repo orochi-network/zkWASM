@@ -33,4 +33,16 @@ impl StateTraceTuple {
             write_locations,
         }
     }
+
+    pub fn get_proof_opcode(&self) -> ProofOpcode {
+        self.proof_opcode.clone()
+    }
+
+    pub fn get_read_locations(&self) -> &[StorageReadRecord; MAX_NUM_READ_LOCATIONS] {
+        &self.read_locations
+    }
+
+    pub fn get_write_locations(&self) -> &[StorageWriteRecord; MAX_NUM_WRITE_LOCATIONS] {
+        &self.write_locations
+    }
 }
