@@ -61,5 +61,10 @@ impl WasmContext {
     pub(crate) fn get_stack<'a>(&'a self) -> &'a Vec<u64> {
         &self.stack
     }
+
+    pub fn get_param_start(&self) -> u64 {
+        let (param_start, _) = self.memory.get_section_size_from_section_index(1);
+        param_start
+    }
 }
 

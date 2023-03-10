@@ -11,7 +11,7 @@ impl WasmContext {
         proof_context: &mut ProofContext,
         pc_before_executing: u64,
         iaddr_before_executing: u64,
-        stack_depth_before_executing: &usize,
+        stack_depth_before_executing: usize,
     ) -> (WasmOpcode, ProofOpcode) {
         let b_location = self.get_stack().len() as u64 - 1;
         let b = self.stack_pop();

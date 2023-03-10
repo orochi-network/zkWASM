@@ -53,4 +53,8 @@ impl RamAccessRecord {
     pub fn get_value(&self) -> u64 {
         self.value
     }
+
+    pub fn get_location(&self) -> u64 {
+        self.location
+    }
 }

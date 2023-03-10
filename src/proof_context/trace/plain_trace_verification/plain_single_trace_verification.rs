@@ -4,6 +4,7 @@ use crate::proof_context::trace::state_trace_tuple::StateTraceTuple;
 
 impl ProofContext {
     fn verify_single_trace_in_plain(
+        &self,
         current_state_trace_tuple: &StateTraceTuple,
         next_state_trace_tuple: &StateTraceTuple,
     ) {
@@ -29,7 +30,7 @@ impl ProofContext {
                 todo!()
             },
             ProofOpcode::LocalGet => {
-                Self::plainly_check_opcode_local_get(
+                self.plainly_check_opcode_local_get(
                     current_state_trace_tuple,
                     next_state_trace_tuple,
                 );
@@ -48,7 +49,7 @@ impl ProofContext {
                 "Checking step {index} with opcode {:?}: ",
                 state_trace_manager.get_state_trace_tuple(index).get_proof_opcode()
             );
-            Self::verify_single_trace_in_plain(
+            self.verify_single_trace_in_plain(
                 state_trace_manager.get_state_trace_tuple(index),
                 state_trace_manager.get_state_trace_tuple(index + 1)
             );

@@ -7,9 +7,9 @@ use crate::proof_context::trace::ram_access_record::RamAccessRecord;
 impl ProofContext {
     pub fn collect_trace_opcode_end(
         &mut self,
-        pc_before_executing: &u64,
-        iaddr_before_executing: &u64,
-        stack_depth_before_executing: &usize,
+        pc_before_executing: u64,
+        iaddr_before_executing: u64,
+        stack_depth_before_executing: usize,
     ) -> ProofOpcode {
         let ram_access_records: [RamAccessRecord; state_trace_tuple::MAX_NUM_RAM_ACCESS_RECORDS] =
             (0..state_trace_tuple::MAX_NUM_RAM_ACCESS_RECORDS).into_iter().map(|_|

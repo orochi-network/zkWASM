@@ -36,4 +36,12 @@ impl StateTraceTuple {
     pub fn get_ram_access_records(&self) -> &[RamAccessRecord; MAX_NUM_RAM_ACCESS_RECORDS] {
         &self.ram_access_records
     }
+
+    pub fn get_pc_before_executing(&self) -> u64 {
+        self.pc_before_executing
+    }
+
+    pub fn get_iaddr_before_executing(&self) -> u64 {
+        self.iaddr_before_executing
+    }
 }
