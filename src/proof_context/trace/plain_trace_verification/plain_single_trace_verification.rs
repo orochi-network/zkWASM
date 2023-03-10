@@ -7,7 +7,7 @@ impl ProofContext {
         current_state_trace_tuple: &StateTraceTuple,
         next_state_trace_tuple: &StateTraceTuple,
     ) -> bool {
-        for read_location in current_state_trace_tuple.get_read_locations() {
+        for ram_access_location in current_state_trace_tuple.get_ram_access_locations() {
             
         }
         match current_state_trace_tuple.get_proof_opcode() {

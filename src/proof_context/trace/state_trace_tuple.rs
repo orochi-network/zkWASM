@@ -1,9 +1,7 @@
 use crate::proof_context::trace::proof_type::proof_opcode::ProofOpcode;
-use crate::proof_context::trace::storage_read_record::StorageReadRecord;
-use crate::proof_context::trace::storage_write_record::StorageWriteRecord;
+use crate::proof_context::trace::ram_access_record::RamAccessRecord;
 
-pub const MAX_NUM_READ_LOCATIONS: usize = 9;
-pub const MAX_NUM_WRITE_LOCATIONS: usize = 8;
+pub const MAX_NUM_RAM_ACCESS_LOCATIONS: usize = 10;
 
 #[derive(Clone)]
 pub struct StateTraceTuple {
@@ -11,8 +9,7 @@ pub struct StateTraceTuple {
     iaddr_before_executing: u64,
     stack_depth_before_executing: usize,
     proof_opcode: ProofOpcode,
-    read_locations: [StorageReadRecord; MAX_NUM_READ_LOCATIONS],
-    write_locations: [StorageWriteRecord; MAX_NUM_WRITE_LOCATIONS],
+    ram_access_locations: [RamAccessRecord; MAX_NUM_RAM_ACCESS_LOCATIONS],
 }
 
 impl StateTraceTuple {
@@ -21,16 +18,14 @@ impl StateTraceTuple {
         iaddr_before_executing: u64,
         stack_depth_before_executing: usize,
         proof_opcode: ProofOpcode,
-        read_locations: [StorageReadRecord; MAX_NUM_READ_LOCATIONS],
-        write_locations: [StorageWriteRecord; MAX_NUM_WRITE_LOCATIONS],
+        ram_access_locations: [RamAccessRecord; MAX_NUM_RAM_ACCESS_LOCATIONS],
     ) -> Self {
         Self {
             pc_before_executing,
             iaddr_before_executing,
             stack_depth_before_executing,
             proof_opcode,
-            read_locations,
-            write_locations,
+            ram_access_locations,
         }
     }
 
@@ -38,11 +33,7 @@ impl StateTraceTuple {
         self.proof_opcode.clone()
     }
 
-    pub fn get_read_locations(&self) -> &[StorageReadRecord; MAX_NUM_READ_LOCATIONS] {
-        &self.read_locations
-    }
-
-    pub fn get_write_locations(&self) -> &[StorageWriteRecord; MAX_NUM_WRITE_LOCATIONS] {
-        &self.write_locations
+    pub fn get_ram_access_locations(&self) -> &[RamAccessRecord; MAX_NUM_RAM_ACCESS_LOCATIONS] {
+        &self.ram_access_locations
     }
 }

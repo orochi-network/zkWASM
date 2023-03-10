@@ -1,10 +1,10 @@
 use crate::proof_context::proof_context::ProofContext;
+use crate::proof_context::trace::proof_type::proof_access_type::ProofAccessType;
 use crate::proof_context::trace::proof_type::proof_opcode::ProofOpcode;
 use crate::proof_context::trace::proof_type::proof_section_type::ProofSectionType;
 use crate::proof_context::trace::proof_type::proof_storage_type::ProofStorageType;
-use crate::proof_context::trace::state_trace_tuple::{MAX_NUM_READ_LOCATIONS, StateTraceTuple};
-use crate::proof_context::trace::storage_read_record::StorageReadRecord;
-use crate::proof_context::trace::storage_write_record::StorageWriteRecord;
+use crate::proof_context::trace::state_trace_tuple::{MAX_NUM_RAM_ACCESS_LOCATIONS, StateTraceTuple};
+use crate::proof_context::trace::ram_access_record::RamAccessRecord;
 
 impl ProofContext {
     pub fn collect_trace_opcode_i64_add(
@@ -18,44 +18,39 @@ impl ProofContext {
         addition_result_starting_location: u64,
         addition_result_in_bytes: [u8; 8],
     ) -> ProofOpcode {
-        let read_locations: [StorageReadRecord; MAX_NUM_READ_LOCATIONS] = {
-            let mut res = Vec::<StorageReadRecord>::new();
+        let ram_access_locations: [RamAccessRecord; MAX_NUM_RAM_ACCESS_LOCATIONS] = {
+            let mut res = Vec::<RamAccessRecord>::new();
             res.push(
-                StorageReadRecord::new(
+                RamAccessRecord::new(
                     ProofStorageType::Stack,
                     ProofSectionType::Stack,
                     b_location,
                     b,
-                    self.get_time_stamp_then_increase()
+                    self.get_time_stamp_then_increase(),
+                    ProofAccessType::Read,
                 )
             );
 
             res.push(
-                StorageReadRecord::new(
+                RamAccessRecord::new(
                     ProofStorageType::Stack,
                     ProofSectionType::Stack,
                     a_location,
                     a,
-                    self.get_time_stamp_then_increase()
+                    self.get_time_stamp_then_increase(),
+                    ProofAccessType::Read
                 )
             );
 
-            for _ in 2..MAX_NUM_READ_LOCATIONS {
-                res.push(StorageReadRecord::dummy(self.get_time_stamp_then_increase()));
-            }
-
-            res.try_into().unwrap()
-        };
-        let write_locations = {
-            let mut res = Vec::<StorageWriteRecord>::new();
             for i in 0..8 {
                 res.push(
-                    StorageWriteRecord::new(
+                    RamAccessRecord::new(
                         ProofStorageType::Memory,
                         addition_result_in_section_types[i].clone(),
                         addition_result_starting_location + i as u64,
                         addition_result_in_bytes[i] as u64,
                         self.get_time_stamp_then_increase(),
+                        ProofAccessType::Write,
                     )
                 );
             }
@@ -71,8 +66,7 @@ impl ProofContext {
                 iaddr_before_executing,
                 stack_depth_before_executing,
                 proof_opcode.clone(),
-                read_locations,
-                write_locations,
+                ram_access_locations,
             )
         );
 

@@ -2,8 +2,7 @@ use crate::proof_context::proof_context::ProofContext;
 use crate::proof_context::trace::proof_type::proof_opcode::ProofOpcode;
 use crate::proof_context::trace::state_trace_tuple;
 use crate::proof_context::trace::state_trace_tuple::StateTraceTuple;
-use crate::proof_context::trace::storage_read_record::StorageReadRecord;
-use crate::proof_context::trace::storage_write_record::StorageWriteRecord;
+use crate::proof_context::trace::ram_access_record::RamAccessRecord;
 
 impl ProofContext {
     pub fn collect_trace_opcode_end(
@@ -12,15 +11,10 @@ impl ProofContext {
         iaddr_before_executing: &u64,
         stack_depth_before_executing: &usize,
     ) -> ProofOpcode {
-        let read_locations: [StorageReadRecord; state_trace_tuple::MAX_NUM_READ_LOCATIONS] =
-            (0..state_trace_tuple::MAX_NUM_READ_LOCATIONS).into_iter().map(|_|
-                StorageReadRecord::dummy(self.get_time_stamp_then_increase())
-            ).collect::<Vec<StorageReadRecord>>().try_into().unwrap();
-
-        let write_locations: [StorageWriteRecord; state_trace_tuple::MAX_NUM_WRITE_LOCATIONS] =
-            (0..state_trace_tuple::MAX_NUM_WRITE_LOCATIONS).into_iter().map(|_|
-                StorageWriteRecord::dummy(self.get_time_stamp_then_increase())
-            ).collect::<Vec<StorageWriteRecord>>().try_into().unwrap();
+        let ram_access_locations: [RamAccessRecord; state_trace_tuple::MAX_NUM_RAM_ACCESS_LOCATIONS] =
+            (0..state_trace_tuple::MAX_NUM_RAM_ACCESS_LOCATIONS).into_iter().map(|_|
+                RamAccessRecord::dummy(self.get_time_stamp_then_increase())
+            ).collect::<Vec<RamAccessRecord>>().try_into().unwrap();
 
         let proof_opcode = ProofOpcode::End;
 
@@ -30,8 +24,7 @@ impl ProofContext {
                 iaddr_before_executing.clone(),
                 stack_depth_before_executing.clone(),
                 proof_opcode.clone(),
-                read_locations,
-                write_locations,
+                ram_access_locations,
             )
         );
 
