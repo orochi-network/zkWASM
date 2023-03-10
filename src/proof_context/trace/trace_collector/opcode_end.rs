@@ -11,8 +11,8 @@ impl ProofContext {
         iaddr_before_executing: &u64,
         stack_depth_before_executing: &usize,
     ) -> ProofOpcode {
-        let ram_access_locations: [RamAccessRecord; state_trace_tuple::MAX_NUM_RAM_ACCESS_LOCATIONS] =
-            (0..state_trace_tuple::MAX_NUM_RAM_ACCESS_LOCATIONS).into_iter().map(|_|
+        let ram_access_records: [RamAccessRecord; state_trace_tuple::MAX_NUM_RAM_ACCESS_RECORDS] =
+            (0..state_trace_tuple::MAX_NUM_RAM_ACCESS_RECORDS).into_iter().map(|_|
                 RamAccessRecord::dummy(self.get_time_stamp_then_increase())
             ).collect::<Vec<RamAccessRecord>>().try_into().unwrap();
 
@@ -24,7 +24,7 @@ impl ProofContext {
                 iaddr_before_executing.clone(),
                 stack_depth_before_executing.clone(),
                 proof_opcode.clone(),
-                ram_access_locations,
+                ram_access_records,
             )
         );
 

@@ -8,20 +8,19 @@ impl ProofContext {
         next_state_trace_tuple: &StateTraceTuple,
     ) {
         // check correct increase in time tag
-        let current_ram_access_locations = current_state_trace_tuple.get_ram_access_locations();
-        for index in 0..current_ram_access_locations.len() - 1 {
+        let current_ram_access_records = current_state_trace_tuple.get_ram_access_records();
+        for index in 0..current_ram_access_records.len() - 1 {
             assert_eq!(
-                current_ram_access_locations[index].get_time_stamp() + 1,
-                current_ram_access_locations[index + 1].get_time_stamp()
-            )
+                current_ram_access_records[index].get_time_stamp() + 1,
+                current_ram_access_records[index + 1].get_time_stamp()
+            );
         }
 
-        let last_index = current_ram_access_locations.len() - 1;
+        let last_index = current_ram_access_records.len() - 1;
         assert_eq!(
-            current_ram_access_locations[last_index].get_time_stamp() + 1,
-            next_state_trace_tuple.get_ram_access_locations()[0].get_time_stamp()
+            current_ram_access_records[last_index].get_time_stamp() + 1,
+            next_state_trace_tuple.get_ram_access_records()[0].get_time_stamp()
         );
-        
         match current_state_trace_tuple.get_proof_opcode() {
             ProofOpcode::Unreachable => {
                 todo!()
@@ -30,22 +29,34 @@ impl ProofContext {
                 todo!()
             },
             ProofOpcode::LocalGet => {
-                todo!()
+                Self::plainly_check_opcode_local_get(
+                    current_state_trace_tuple,
+                    next_state_trace_tuple,
+                );
             },
             ProofOpcode::I64Add => {
                 todo!()
             },
-        }
+        };
     }
 
     pub fn verify_trace_in_plain(&self) {
         // check consistency in proof_context trace
         let state_trace_manager = self.get_state_trace_manager();
         for index in 0..state_trace_manager.size() - 1 {
-            Self::verify_single_trace_in_plain(
-                state_trace_manager.get_state_trace_tupe(index),
-                state_trace_manager.get_state_trace_tupe(index + 1)
+            print!(
+                "Checking step {index} with opcode {:?}: ",
+                state_trace_manager.get_state_trace_tuple(index).get_proof_opcode()
             );
+            Self::verify_single_trace_in_plain(
+                state_trace_manager.get_state_trace_tuple(index),
+                state_trace_manager.get_state_trace_tuple(index + 1)
+            );
+            println!(" passed!");
         }
+    }
+
+    pub(crate) fn verify_in_range(min_value: u64, max_value: u64, value_to_check: u64) {
+        assert!((min_value <= value_to_check) && (value_to_check <= max_value));
     }
 }

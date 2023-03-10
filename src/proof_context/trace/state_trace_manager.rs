@@ -19,7 +19,7 @@ impl StateTraceManager {
         self.trace_vector.len()
     }
 
-    pub fn get_state_trace_tupe(&self, index: usize) -> &StateTraceTuple {
+    pub fn get_state_trace_tuple(&self, index: usize) -> &StateTraceTuple {
         &self.trace_vector[index]
     }
 }

@@ -1,4 +1,4 @@
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub enum ProofOpcode {
     Unreachable = 0x00,
     End = 0x0b,

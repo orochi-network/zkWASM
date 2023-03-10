@@ -1,7 +1,7 @@
 use crate::proof_context::trace::proof_type::proof_opcode::ProofOpcode;
 use crate::proof_context::trace::ram_access_record::RamAccessRecord;
 
-pub const MAX_NUM_RAM_ACCESS_LOCATIONS: usize = 10;
+pub const MAX_NUM_RAM_ACCESS_RECORDS: usize = 10;
 
 #[derive(Clone)]
 pub struct StateTraceTuple {
@@ -9,7 +9,7 @@ pub struct StateTraceTuple {
     iaddr_before_executing: u64,
     stack_depth_before_executing: usize,
     proof_opcode: ProofOpcode,
-    ram_access_locations: [RamAccessRecord; MAX_NUM_RAM_ACCESS_LOCATIONS],
+    ram_access_records: [RamAccessRecord; MAX_NUM_RAM_ACCESS_RECORDS],
 }
 
 impl StateTraceTuple {
@@ -18,14 +18,14 @@ impl StateTraceTuple {
         iaddr_before_executing: u64,
         stack_depth_before_executing: usize,
         proof_opcode: ProofOpcode,
-        ram_access_locations: [RamAccessRecord; MAX_NUM_RAM_ACCESS_LOCATIONS],
+        ram_access_records: [RamAccessRecord; MAX_NUM_RAM_ACCESS_RECORDS],
     ) -> Self {
         Self {
             pc_before_executing,
             iaddr_before_executing,
             stack_depth_before_executing,
             proof_opcode,
-            ram_access_locations,
+            ram_access_records,
         }
     }
 
@@ -33,7 +33,7 @@ impl StateTraceTuple {
         self.proof_opcode.clone()
     }
 
-    pub fn get_ram_access_locations(&self) -> &[RamAccessRecord; MAX_NUM_RAM_ACCESS_LOCATIONS] {
-        &self.ram_access_locations
+    pub fn get_ram_access_records(&self) -> &[RamAccessRecord; MAX_NUM_RAM_ACCESS_RECORDS] {
+        &self.ram_access_records
     }
 }

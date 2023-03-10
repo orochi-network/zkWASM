@@ -45,4 +45,12 @@ impl RamAccessRecord {
     pub fn get_time_stamp(&self) -> u64 {
         self.time_stamp
     }
+
+    pub fn get_access_type(&self) -> ProofAccessType {
+        self.access_type.clone()
+    }
+
+    pub fn get_value(&self) -> u64 {
+        self.value
+    }
 }

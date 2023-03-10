@@ -3,7 +3,7 @@ use crate::proof_context::trace::proof_type::proof_access_type::ProofAccessType;
 use crate::proof_context::trace::proof_type::proof_opcode::ProofOpcode;
 use crate::proof_context::trace::proof_type::proof_section_type::ProofSectionType;
 use crate::proof_context::trace::proof_type::proof_storage_type::ProofStorageType;
-use crate::proof_context::trace::state_trace_tuple::{MAX_NUM_RAM_ACCESS_LOCATIONS, StateTraceTuple};
+use crate::proof_context::trace::state_trace_tuple::{MAX_NUM_RAM_ACCESS_RECORDS, StateTraceTuple};
 use crate::proof_context::trace::ram_access_record::RamAccessRecord;
 
 impl ProofContext {
@@ -18,7 +18,7 @@ impl ProofContext {
         addition_result_starting_location: u64,
         addition_result_in_bytes: [u8; 8],
     ) -> ProofOpcode {
-        let ram_access_locations: [RamAccessRecord; MAX_NUM_RAM_ACCESS_LOCATIONS] = {
+        let ram_access_records: [RamAccessRecord; MAX_NUM_RAM_ACCESS_RECORDS] = {
             let mut res = Vec::<RamAccessRecord>::new();
             res.push(
                 RamAccessRecord::new(
@@ -66,7 +66,7 @@ impl ProofContext {
                 iaddr_before_executing,
                 stack_depth_before_executing,
                 proof_opcode.clone(),
-                ram_access_locations,
+                ram_access_records,
             )
         );
 

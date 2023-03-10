@@ -39,7 +39,7 @@ impl WasmContext {
             .try_into()
             .unwrap();
         // TODO: possibly change 8 above to constant
-        let section_types_of_read_locations: [
+        let section_types_of_read_records: [
             ProofSectionType;
             NUM_BYTES_FOR_LOCAL_GET
         ] = (0..NUM_BYTES_FOR_LOCAL_GET).into_iter().map(|i|
@@ -73,7 +73,7 @@ impl WasmContext {
             stack_depth_before_executing.clone(),
             section_type_of_param_index,
             param_index as u64,
-            &section_types_of_read_locations,
+            &section_types_of_read_records,
             start_index,
             &read_bytes,
             param,
