@@ -24,4 +24,6 @@ fn main() {
     a.next(&mut proof_context);
     a.next(&mut proof_context);
     a.next(&mut proof_context);
+
+    proof_context.verify_trace_in_plain();
 }

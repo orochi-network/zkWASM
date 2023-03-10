@@ -38,7 +38,7 @@ impl ProofContext {
                     a_location,
                     a,
                     self.get_time_stamp_then_increase(),
-                    ProofAccessType::Read
+                    ProofAccessType::Read,
                 )
             );
 

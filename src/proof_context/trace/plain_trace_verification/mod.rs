@@ -1,2 +1,2 @@
 mod plain_single_trace_verification;
-mod opcode_local_get;
+pub mod opcode_local_get;

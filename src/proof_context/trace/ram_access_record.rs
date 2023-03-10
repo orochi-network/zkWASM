@@ -13,12 +13,13 @@ pub struct RamAccessRecord {
 }
 
 impl RamAccessRecord {
-    pub fn new(storage_type: ProofStorageType,
-               section_type: ProofSectionType,
-               location: u64,
-               value: u64,
-               time_stamp: u64,
-               access_type: ProofAccessType,
+    pub fn new(
+        storage_type: ProofStorageType,
+        section_type: ProofSectionType,
+        location: u64,
+        value: u64,
+        time_stamp: u64,
+        access_type: ProofAccessType,
     ) -> Self {
         Self {
             storage_type,
@@ -39,5 +40,9 @@ impl RamAccessRecord {
             time_stamp,
             ProofAccessType::Read,
         )
+    }
+
+    pub fn get_time_stamp(&self) -> u64 {
+        self.time_stamp
     }
 }

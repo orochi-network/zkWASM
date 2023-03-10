@@ -57,9 +57,11 @@ impl ProofContext {
                 )
             );
 
+            // push dummy elements
             let _ = (res.len()..MAX_NUM_RAM_ACCESS_LOCATIONS).into_iter().map(|_| {
                 res.push(RamAccessRecord::dummy(self.get_time_stamp_then_increase()));
             });
+
             res.try_into().unwrap()
         };
 

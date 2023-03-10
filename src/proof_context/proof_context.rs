@@ -20,6 +20,10 @@ impl ProofContext {
         res
     }
 
+    pub fn get_state_trace_manager(&self) -> &StateTraceManager {
+        &self.state_trace_manager
+    }
+
     pub(crate) fn add_state_trace_tuple(&mut self, state_trace_tuple: &StateTraceTuple) {
         self.state_trace_manager.add_state_trace_tuple(state_trace_tuple);
     }
