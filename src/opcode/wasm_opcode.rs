@@ -12,12 +12,12 @@ pub enum WasmOpcode {
 }
 
 impl WasmOpcode {
-    pub fn to_u8(&self) -> u8 {
+    pub fn to_u16(&self) -> u16 {
         match self {
             Self::Unreachable => 0x00,
+            Self::End => 0x0b,
             Self::LocalGet(_, _) => 0x20,
             Self::I64Add(_, _) => 0x7c,
-            Self::End => 0x0b,
         }
     }
 }

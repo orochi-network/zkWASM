@@ -4,13 +4,16 @@ use crate::proof_context::trace::state_trace_tuple::StateTraceTuple;
 pub struct ProofContext {
     state_trace_manager: StateTraceManager,
     time_stamp: u64,
+
+    param_start: u64,
 }
 
 impl ProofContext {
-    pub fn new() -> Self {
+    pub fn new(param_start: u64) -> Self {
         Self {
             state_trace_manager: StateTraceManager::new(),
             time_stamp: 0,
+            param_start,
         }
     }
 
@@ -20,7 +23,15 @@ impl ProofContext {
         res
     }
 
+    pub fn get_state_trace_manager(&self) -> &StateTraceManager {
+        &self.state_trace_manager
+    }
+
     pub(crate) fn add_state_trace_tuple(&mut self, state_trace_tuple: &StateTraceTuple) {
         self.state_trace_manager.add_state_trace_tuple(state_trace_tuple);
+    }
+
+    pub(crate) fn get_param_start(&self) -> u64 {
+        self.param_start
     }
 }
