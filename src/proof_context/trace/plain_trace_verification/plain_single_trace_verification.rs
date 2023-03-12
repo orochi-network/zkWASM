@@ -36,7 +36,10 @@ impl ProofContext {
                 );
             },
             ProofOpcode::I64Add => {
-                todo!()
+                self.plainly_check_opcode_i64_add(
+                    current_state_trace_tuple,
+                    next_state_trace_tuple,
+                );
             },
         };
     }
