@@ -3,6 +3,7 @@ use crate::opcode::wasm_opcode::WasmOpcode;
 use crate::proof_context::proof_context::ProofContext;
 use crate::proof_context::trace::proof_type::proof_opcode::ProofOpcode;
 use crate::proof_context::trace::proof_type::proof_section_type::ProofSectionType;
+use crate::proof_context::trace::trace_collector::opcode_local_get::TraceCollector;
 use crate::util::constant_setting::NUM_BYTES_FOR_LOCAL_GET;
 use crate::wasm_context::wasm_context::WasmContext;
 
@@ -67,7 +68,8 @@ impl WasmContext {
         self.inc_pc();
 
         // collect trace
-        let proof_opcode = proof_context.collect_trace_opcode_local_get(
+        use super::super::super::proof_context::trace::trace_collector::opcode_local_get::TraceCollector;
+        let proof_opcode = proof_context.collect(
             pc_before_executing.clone(),
             iaddr_before_executing.clone(),
             stack_depth_before_executing.clone(),

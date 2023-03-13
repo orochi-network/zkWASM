@@ -1,3 +1,3 @@
 pub mod opcode_end;
-mod opcode_local_get;
-mod opcode_i64_add;
+pub mod opcode_local_get;
+pub mod opcode_i64_add;

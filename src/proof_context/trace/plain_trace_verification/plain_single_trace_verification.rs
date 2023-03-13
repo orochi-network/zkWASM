@@ -30,13 +30,15 @@ impl ProofContext {
                 todo!()
             },
             ProofOpcode::LocalGet => {
-                self.plainly_check_opcode_local_get(
+                use super::opcode_local_get::PlainCheck;
+                self.check(
                     current_state_trace_tuple,
                     next_state_trace_tuple,
                 );
             },
             ProofOpcode::I64Add => {
-                self.plainly_check_opcode_i64_add(
+                use super::opcode_i64_add::PlainCheck;
+                self.check(
                     current_state_trace_tuple,
                     next_state_trace_tuple,
                 );

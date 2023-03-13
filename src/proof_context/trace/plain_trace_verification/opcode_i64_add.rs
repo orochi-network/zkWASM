@@ -1,6 +1,26 @@
 use crate::proof_context::proof_context::ProofContext;
 use crate::proof_context::trace::state_trace_tuple::StateTraceTuple;
 
+pub trait PlainCheck {
+    fn check(
+        &self,
+        current_state_trace_tuple: &StateTraceTuple,
+        next_state_trace_tuple: &StateTraceTuple,
+    );
+}
+
+impl PlainCheck for ProofContext {
+    fn check(
+        &self,
+        current_state_trace_tuple: &StateTraceTuple,
+        next_state_trace_tuple: &StateTraceTuple,
+    ) {
+        use self::private_part_for_plainly_checking_opcode_i64_add::PrivatePart;
+        Self::check_iaddr_and_pc_consistent(current_state_trace_tuple, next_state_trace_tuple);
+        todo!();
+    }
+}
+
 mod private_part_for_plainly_checking_opcode_i64_add {
     use crate::proof_context::proof_context::ProofContext;
     use crate::proof_context::trace::state_trace_tuple::StateTraceTuple;
@@ -26,17 +46,5 @@ mod private_part_for_plainly_checking_opcode_i64_add {
                 next_state_trace_tuple.get_pc_before_executing()
             );
         }
-    }
-}
-
-impl ProofContext {
-    pub fn plainly_check_opcode_i64_add(
-        &self,
-        current_state_trace_tuple: &StateTraceTuple,
-        next_state_trace_tuple: &StateTraceTuple,
-    ) {
-        use self::private_part_for_plainly_checking_opcode_i64_add::PrivatePart;
-        Self::check_iaddr_and_pc_consistent(current_state_trace_tuple, next_state_trace_tuple);
-        todo!();
     }
 }

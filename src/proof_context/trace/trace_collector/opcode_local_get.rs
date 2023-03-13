@@ -7,8 +7,23 @@ use crate::proof_context::trace::state_trace_tuple::{MAX_NUM_RAM_ACCESS_RECORDS,
 use crate::proof_context::trace::ram_access_record::RamAccessRecord;
 use crate::util::constant_setting::NUM_BYTES_FOR_LOCAL_GET;
 
-impl ProofContext {
-    pub fn collect_trace_opcode_local_get(
+pub trait TraceCollector {
+    fn collect(
+        &mut self,
+        pc_before_executing: u64,
+        iaddr_before_executing: u64,
+        stack_depth_before_executing: usize,
+        section_type_of_param_index: ProofSectionType,
+        param_index: u64,
+        section_types_of_read_records: &[ProofSectionType; NUM_BYTES_FOR_LOCAL_GET],
+        first_index_read: u64,
+        read_bytes: &[u8; NUM_BYTES_FOR_LOCAL_GET],
+        pushed_stack_value: u64,
+    ) -> ProofOpcode;
+}
+
+impl TraceCollector for ProofContext {
+    fn collect(
         &mut self,
         pc_before_executing: u64,
         iaddr_before_executing: u64,

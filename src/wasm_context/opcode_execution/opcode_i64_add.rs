@@ -43,7 +43,8 @@ impl WasmContext {
 
 
         // collect trace
-        let proof_opcode = proof_context.collect_trace_opcode_i64_add(
+        use super::super::super::proof_context::trace::trace_collector::opcode_i64_add::TraceCollector;
+        let proof_opcode = proof_context.collect(
             pc_before_executing.clone(),
             iaddr_before_executing.clone(),
             stack_depth_before_executing.clone(),

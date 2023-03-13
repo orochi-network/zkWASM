@@ -6,8 +6,22 @@ use crate::proof_context::trace::proof_type::proof_storage_type::ProofStorageTyp
 use crate::proof_context::trace::state_trace_tuple::{MAX_NUM_RAM_ACCESS_RECORDS, StateTraceTuple};
 use crate::proof_context::trace::ram_access_record::RamAccessRecord;
 
-impl ProofContext {
-    pub fn collect_trace_opcode_i64_add(
+pub trait TraceCollector {
+    fn collect(
+        &mut self,
+        pc_before_executing: u64,
+        iaddr_before_executing: u64,
+        stack_depth_before_executing: usize,
+        b_location: u64, b: u64,
+        a_location: u64, a: u64,
+        addition_result_in_section_types: [ProofSectionType; 8],
+        addition_result_starting_location: u64,
+        addition_result_in_bytes: [u8; 8],
+    ) -> ProofOpcode;
+}
+
+impl TraceCollector for ProofContext {
+    fn collect(
         &mut self,
         pc_before_executing: u64,
         iaddr_before_executing: u64,
