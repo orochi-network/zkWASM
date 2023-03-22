@@ -9,6 +9,10 @@ edition = "2021"
 name = "zkwasm"
 path = "src/main.rs"
 
+[[lib]]
+name = "zkmemory"
+path = "memory/src/lib.rs"
+
 [features]
 
 [dependencies]
