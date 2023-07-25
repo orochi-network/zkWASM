@@ -11,8 +11,6 @@ fn main() {
     [0x20, 0x00, 0x20, 0x1, 0x7c, 0xb]
     */
 
-    let mut proof_context = ProofContext::new();
-
     let mut a = WasmContext::new(
         &[0x20u8, 0x00, 0x20, 0x1, 0x7c, 0xb],
         &[
@@ -20,8 +18,12 @@ fn main() {
         ],
     );
 
+    let mut proof_context = ProofContext::new(a.get_param_start());
+
     a.next(&mut proof_context);
     a.next(&mut proof_context);
     a.next(&mut proof_context);
     a.next(&mut proof_context);
+
+    proof_context.verify_trace_in_plain();
 }

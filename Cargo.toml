@@ -16,3 +16,4 @@ path = "memory/src/lib.rs"
 [features]
 
 [dependencies]
+halo2_proofs = {git = "https://github.com/privacy-scaling-explorations/halo2.git", rev = "v2023_02_02"}
